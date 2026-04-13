@@ -8,8 +8,18 @@
   box-sizing: border-box;
 }
 
+<<<<<<< HEAD
 html, body {
   width: 100%;
   height: 100%;
   overflow: auto;
+=======
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #1e1e1e;
+  color: #fff;
+>>>>>>> eaed134 (2026.4.13変更)
 }

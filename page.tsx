@@ -1,10 +1,6 @@
 "use client";
 
-<<<<<<< HEAD
 import React, { useState, useEffect, useRef } from 'react';
-=======
-import React, { useState, useEffect, useRef, ChangeEvent, FormEvent } from 'react';
->>>>>>> eaed134 (2026.4.13変更)
 import { motion, AnimatePresence } from 'framer-motion';
 import { Lock, User, LayoutDashboard, ShoppingCart, Package, Users, Settings, LogOut } from 'lucide-react';
 
@@ -12,39 +8,11 @@ import { Lock, User, LayoutDashboard, ShoppingCart, Package, Users, Settings, Lo
 type Screen = 'splash' | 'auth' | 'dashboard';
 type AuthMode = 'login' | 'register';
 
-<<<<<<< HEAD
-interface Star {
-  x: number;
-  y: number;
-  r: number;
-  o: number;
-  speed: number;
-  phase: number;
-}
-
-interface FormData {
-  name: string;
-  password: string;
-}
-
-interface FormErrors {
-  name: string;
-  password: string;
-}
-
-export default function KHStudioApp() {
-  const [screen, setScreen] = useState<Screen>('splash');
-  const [authMode, setAuthMode] = useState<AuthMode>('login');
-  const [formData, setFormData] = useState<FormData>({ name: '', password: '' });
-  const [errors, setErrors] = useState<FormErrors>({ name: '', password: '' });
-  const [isLoading, setIsLoading] = useState(false);
-=======
 export default function KHStudioApp() {
   const [screen, setScreen] = useState<Screen>('splash');
   const [authMode, setAuthMode] = useState<AuthMode>('login');
   const [formData, setFormData] = useState({ name: '', password: '' });
   const [errors, setErrors] = useState({ name: '', password: '' });
->>>>>>> eaed134 (2026.4.13変更)
 
   // 1. スプラッシュ画面の5秒タイマー
   useEffect(() => {
@@ -54,39 +22,19 @@ export default function KHStudioApp() {
 
   // 2. 背景の星空描画 (useEffect)
   const canvasRef = useRef<HTMLCanvasElement>(null);
-<<<<<<< HEAD
-  const starsRef = useRef<Star[]>([]);
-  const tRef = useRef(0);
-  const animationFrameIdRef = useRef<number>();
-
-=======
->>>>>>> eaed134 (2026.4.13変更)
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-<<<<<<< HEAD
-    // 星の初期化
-    const initializeStars = () => {
-      starsRef.current = Array.from({ length: 160 }, () => ({
-=======
     let animationFrameId: number;
-    let stars: Array<{
-      x: number;
-      y: number;
-      r: number;
-      o: number;
-      speed: number;
-      phase: number;
-    }> = [];
+    let stars: any[] = [];
 
     const resize = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
       stars = Array.from({ length: 160 }, () => ({
->>>>>>> eaed134 (2026.4.13変更)
         x: Math.random(),
         y: Math.random(),
         r: Math.random() * 1.2 + 0.2,
@@ -96,117 +44,17 @@ export default function KHStudioApp() {
       }));
     };
 
-<<<<<<< HEAD
-    const resize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      // リサイズ時に星を再生成しない（改善）
-      if (starsRef.current.length === 0) {
-        initializeStars();
-      }
-    };
-
-    const draw = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      tRef.current += 0.016;
-      
-      starsRef.current.forEach((s) => {
-        const opacity = s.o * (0.6 + 0.4 * Math.sin(tRef.current * s.speed * 100 + s.phase));
-=======
     let t = 0;
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       t += 0.016;
       stars.forEach(s => {
         const opacity = s.o * (0.6 + 0.4 * Math.sin(t * s.speed * 100 + s.phase));
->>>>>>> eaed134 (2026.4.13変更)
         ctx.beginPath();
         ctx.arc(s.x * canvas.width, s.y * canvas.height, s.r, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
         ctx.fill();
       });
-<<<<<<< HEAD
-      animationFrameIdRef.current = requestAnimationFrame(draw);
-    };
-
-    window.addEventListener('resize', resize);
-    initializeStars();
-    resize();
-    draw();
-
-    return () => {
-      window.removeEventListener('resize', resize);
-      if (animationFrameIdRef.current) {
-        cancelAnimationFrame(animationFrameIdRef.current);
-      }
-    };
-  }, []);
-
-  // 3. バリデーション ロジック（authModeに応じた異なるルール）
-  const validateForm = (): boolean => {
-    const newErrors: FormErrors = {
-      name: formData.name.length < 2 ? '2文字以上で入力してください' : '',
-      password: formData.password.length < 8 ? '8文字以上で入力してください' : '',
-    };
-
-    // Register モードの場合、パスワード強度チェックを追加
-    if (authMode === 'register' && formData.password) {
-      const hasUpperCase = /[A-Z]/.test(formData.password);
-      const hasNumber = /[0-9]/.test(formData.password);
-      if (!hasUpperCase || !hasNumber) {
-        newErrors.password = 'パスワードは大文字と数字を含む必要があります';
-      }
-    }
-
-    setErrors(newErrors);
-    return !newErrors.name && !newErrors.password;
-  };
-
-  // 4. フォーム送信（ローディング状態を追加）
-  const handleAuth = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!validateForm()) {
-      return;
-    }
-
-    // ローディング状態を開始
-    setIsLoading(true);
-
-    // 送信処理をシミュレート（実際のAPIコールに置き換え可能）
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 800));
-      
-      // 成功時
-      console.log(`✅ ${authMode === 'login' ? 'ログイン' : '登録'} 成功:`, formData);
-      setScreen('dashboard');
-    } catch (error) {
-      console.error('❌ エラー:', error);
-      setErrors({
-        name: '',
-        password: 'エラーが発生しました。もう一度お試しください。',
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // 5. ログアウト（フォーム入力をクリア）
-  const handleLogout = () => {
-    setFormData({ name: '', password: '' });
-    setErrors({ name: '', password: '' });
-    setScreen('auth');
-  };
-
-  // 6. Auth モード切り替え（エラーもクリア）
-  const handleAuthModeToggle = () => {
-    setAuthMode(authMode === 'login' ? 'register' : 'login');
-    setErrors({ name: '', password: '' });
-  };
-
-  return (
-    <div className="relative min-h-screen w-full bg-black text-white overflow-hidden font-sans selection:bg-[#00e5ff]/30">
-=======
       animationFrameId = requestAnimationFrame(draw);
     };
 
@@ -220,7 +68,7 @@ export default function KHStudioApp() {
   }, []);
 
   // 3. バリデーション & 送信
-  const handleAuth = (e: FormEvent<HTMLFormElement>) => {
+  const handleAuth = (e: React.FormEvent) => {
     e.preventDefault();
     const newErrors = {
       name: formData.name.length < 2 ? '2文字以上で入力してください' : '',
@@ -233,17 +81,8 @@ export default function KHStudioApp() {
     }
   };
 
-  const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setFormData({...formData, name: e.target.value});
-  };
-
-  const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setFormData({...formData, password: e.target.value});
-  };
-
   return (
-    <div className="relative min-h-screen w-full bg-[#1e1e1e] text-white overflow-hidden font-sans selection:bg-[#00e5ff]/30">
->>>>>>> eaed134 (2026.4.13変更)
+    <div className="relative min-h-screen w-full bg-black text-white overflow-hidden font-sans selection:bg-[#00e5ff]/30">
       {/* 背景レイヤー */}
       <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none z-0" />
       <div className="fixed inset-0 z-1 pointer-events-none opacity-40 mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
@@ -298,118 +137,56 @@ export default function KHStudioApp() {
             <div className="w-full max-w-md bg-white/5 backdrop-blur-xl border border-white/10 p-8 rounded-2xl shadow-2xl">
               <div className="text-center mb-8">
                 <h2 className="text-2xl font-orbitron font-bold tracking-wider">
-<<<<<<< HEAD
                   {authMode === 'login' ? 'WELCOME BACK' : 'CREATE ACCOUNT'}
                 </h2>
                 <p className="text-xs text-[#00e5ff] mt-2 tracking-widest uppercase">System Access Required</p>
-=======
-                  {authMode === 'login' ? 'おかえりなさい' : 'アカウント作成'}
-                </h2>
-                <p className="text-xs text-[#00e5ff] mt-2 tracking-widest uppercase">システムアクセスが必要です</p>
->>>>>>> eaed134 (2026.4.13変更)
               </div>
 
               <form onSubmit={handleAuth} className="space-y-6">
                 <div>
-<<<<<<< HEAD
                   <label className="block text-[10px] uppercase tracking-widest text-gray-400 mb-2">Identifier</label>
-=======
-                  <label className="block text-[10px] uppercase tracking-widest text-gray-400 mb-2">識別子</label>
->>>>>>> eaed134 (2026.4.13変更)
                   <div className="relative">
                     <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#00e5ff]" />
                     <input 
                       type="text"
-<<<<<<< HEAD
-                      className="w-full bg-black/40 border border-white/10 rounded-lg py-3 pl-10 pr-4 focus:border-[#00e5ff]/50 outline-none transition-all disabled:opacity-50"
+                      className="w-full bg-black/40 border border-white/10 rounded-lg py-3 pl-10 pr-4 focus:border-[#00e5ff]/50 outline-none transition-all"
                       placeholder="Username"
                       value={formData.name}
                       onChange={(e) => setFormData({...formData, name: e.target.value})}
-                      disabled={isLoading}
-=======
-                      className="w-full bg-[#1e1e1e]/60 border border-white/10 rounded-lg py-3 pl-10 pr-4 focus:border-[#00e5ff]/50 outline-none transition-all"
-                      placeholder="ユーザー名"
-                      value={formData.name}
-                      onChange={handleNameChange}
->>>>>>> eaed134 (2026.4.13変更)
                     />
                   </div>
                   {errors.name && <p className="text-red-400 text-[10px] mt-1">{errors.name}</p>}
                 </div>
 
                 <div>
-<<<<<<< HEAD
                   <label className="block text-[10px] uppercase tracking-widest text-gray-400 mb-2">Secret Key</label>
-=======
-                  <label className="block text-[10px] uppercase tracking-widest text-gray-400 mb-2">秘密鍵</label>
->>>>>>> eaed134 (2026.4.13変更)
                   <div className="relative">
                     <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#00e5ff]" />
                     <input 
                       type="password"
-<<<<<<< HEAD
-                      className="w-full bg-black/40 border border-white/10 rounded-lg py-3 pl-10 pr-4 focus:border-[#00e5ff]/50 outline-none transition-all disabled:opacity-50"
+                      className="w-full bg-black/40 border border-white/10 rounded-lg py-3 pl-10 pr-4 focus:border-[#00e5ff]/50 outline-none transition-all"
                       placeholder="••••••••"
                       value={formData.password}
                       onChange={(e) => setFormData({...formData, password: e.target.value})}
-                      disabled={isLoading}
                     />
                   </div>
                   {errors.password && <p className="text-red-400 text-[10px] mt-1">{errors.password}</p>}
-                  
-                  {/* Register モードのパスワード要件 */}
-                  {authMode === 'register' && (
-                    <div className="mt-2 text-[9px] text-gray-500">
-                      <p>要件: 8文字以上、大文字と数字を含む</p>
-                    </div>
-                  )}
-=======
-                      className="w-full bg-[#1e1e1e]/60 border border-white/10 rounded-lg py-3 pl-10 pr-4 focus:border-[#00e5ff]/50 outline-none transition-all"
-                      placeholder="••••••••"
-                      value={formData.password}
-                      onChange={handlePasswordChange}
-                    />
-                  </div>
-                  {errors.password && <p className="text-red-400 text-[10px] mt-1">{errors.password}</p>}
->>>>>>> eaed134 (2026.4.13変更)
                 </div>
 
                 <button 
                   type="submit"
-<<<<<<< HEAD
-                  disabled={isLoading}
-                  className="w-full bg-gradient-to-r from-[#00e5ff] to-[#009bb0] text-black font-bold py-3 rounded-lg hover:opacity-90 transition-opacity shadow-[0_0_15px_rgba(0,229,255,0.3)] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                >
-                  {isLoading ? (
-                    <>
-                      <div className="w-4 h-4 border-2 border-transparent border-t-black rounded-full animate-spin" />
-                      <span>処理中...</span>
-                    </>
-                  ) : (
-                    authMode === 'login' ? 'INITIALIZE SESSION' : 'REGISTER AGENT'
-                  )}
-=======
                   className="w-full bg-gradient-to-r from-[#00e5ff] to-[#009bb0] text-black font-bold py-3 rounded-lg hover:opacity-90 transition-opacity shadow-[0_0_15px_rgba(0,229,255,0.3)]"
                 >
-                  {authMode === 'login' ? 'セッション開始' : 'エージェント登録'}
->>>>>>> eaed134 (2026.4.13変更)
+                  {authMode === 'login' ? 'INITIALIZE SESSION' : 'REGISTER AGENT'}
                 </button>
               </form>
 
               <div className="mt-6 text-center">
                 <button 
-<<<<<<< HEAD
-                  onClick={handleAuthModeToggle}
-                  disabled={isLoading}
-                  className="text-[10px] text-gray-400 hover:text-[#00e5ff] tracking-widest uppercase transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {authMode === 'login' ? "Don't have an account? Sign Up" : "Already registered? Login"}
-=======
                   onClick={() => setAuthMode(authMode === 'login' ? 'register' : 'login')}
                   className="text-[10px] text-gray-400 hover:text-[#00e5ff] tracking-widest uppercase transition-colors"
                 >
-                  {authMode === 'login' ? "アカウントをお持ちでないですか？サインアップ" : "既に登録済みですか？ログイン"}
->>>>>>> eaed134 (2026.4.13変更)
+                  {authMode === 'login' ? "Don't have an account? Sign Up" : "Already registered? Login"}
                 </button>
               </div>
             </div>
@@ -427,13 +204,8 @@ export default function KHStudioApp() {
             <nav className="fixed top-0 left-0 right-0 h-16 border-b border-white/5 backdrop-blur-md z-50 px-8 flex items-center justify-between">
               <div className="font-orbitron font-bold text-sm tracking-tighter">KH <span className="text-[#00e5ff]">CORE</span></div>
               <div className="flex gap-6">
-<<<<<<< HEAD
-                <Settings className="w-4 h-4 text-gray-400 hover:text-white cursor-pointer transition-colors" />
-                <LogOut className="w-4 h-4 text-gray-400 hover:text-white cursor-pointer transition-colors" onClick={handleLogout} />
-=======
                 <Settings className="w-4 h-4 text-gray-400 hover:text-white cursor-pointer" />
                 <LogOut className="w-4 h-4 text-gray-400 hover:text-white cursor-pointer" onClick={() => setScreen('auth')} />
->>>>>>> eaed134 (2026.4.13変更)
               </div>
             </nav>
 
@@ -442,11 +214,7 @@ export default function KHStudioApp() {
               <div className="md:col-span-2 md:row-span-2 bg-white/5 backdrop-blur-md border border-white/10 rounded-3xl p-8 flex flex-col">
                 <div className="flex items-center gap-3 mb-6">
                   <LayoutDashboard className="text-[#00e5ff]" />
-<<<<<<< HEAD
                   <h3 className="font-orbitron tracking-widest text-lg">OPERATIONS CONTROL</h3>
-=======
-                  <h3 className="font-orbitron tracking-widest text-lg">運用管理</h3>
->>>>>>> eaed134 (2026.4.13変更)
                 </div>
                 <div className="flex-1 border border-dashed border-white/10 rounded-xl flex items-center justify-center text-gray-500 text-sm">
                   中央作業エリア: 受発注リストを表示
@@ -458,11 +226,7 @@ export default function KHStudioApp() {
                 <ShoppingCart className="text-[#00e5ff] w-5 h-5" />
                 <div>
                   <div className="text-3xl font-bold font-orbitron">24</div>
-<<<<<<< HEAD
                   <div className="text-[10px] text-gray-400 tracking-widest uppercase">Pending Orders</div>
-=======
-                  <div className="text-[10px] text-gray-400 tracking-widest uppercase">保留中の注文</div>
->>>>>>> eaed134 (2026.4.13変更)
                 </div>
               </div>
 
@@ -471,11 +235,7 @@ export default function KHStudioApp() {
                 <Package className="text-gray-400 w-5 h-5" />
                 <div>
                   <div className="text-3xl font-bold font-orbitron">1,204</div>
-<<<<<<< HEAD
                   <div className="text-[10px] text-gray-400 tracking-widest uppercase">Stock Units</div>
-=======
-                  <div className="text-[10px] text-gray-400 tracking-widest uppercase">在庫単位</div>
->>>>>>> eaed134 (2026.4.13変更)
                 </div>
               </div>
 
@@ -484,29 +244,17 @@ export default function KHStudioApp() {
                 <Users className="text-gray-400 w-5 h-5" />
                 <div>
                   <div className="text-3xl font-bold font-orbitron">89</div>
-<<<<<<< HEAD
                   <div className="text-[10px] text-gray-400 tracking-widest uppercase">Active Clients</div>
-=======
-                  <div className="text-[10px] text-gray-400 tracking-widest uppercase">アクティブクライアント</div>
->>>>>>> eaed134 (2026.4.13変更)
                 </div>
               </div>
 
               {/* Activity Feed */}
               <div className="md:col-span-2 bg-white/5 backdrop-blur-md border border-white/10 rounded-3xl p-6 overflow-hidden">
-<<<<<<< HEAD
                 <h4 className="text-[10px] tracking-[0.3em] text-[#00e5ff] uppercase mb-4">Live System Log</h4>
                 <div className="space-y-2 font-mono text-[10px] text-gray-500">
                   <p>{`> System initialized... OK`}</p>
                   <p>{`> Fetching order history... DONE`}</p>
                   <p className="text-[#00e5ff]/60">{`> New order received from ID: #8821`}</p>
-=======
-                <h4 className="text-[10px] tracking-[0.3em] text-[#00e5ff] uppercase mb-4">ライブシステムログ</h4>
-                <div className="space-y-2 font-mono text-[10px] text-gray-500">
-                  <p>{`> システム初期化... OK`}</p>
-                  <p>{`> 注文履歴取得... 完了`}</p>
-                  <p className="text-[#00e5ff]/60">{`> 新規注文受信 ID: #8821`}</p>
->>>>>>> eaed134 (2026.4.13変更)
                 </div>
               </div>
             </div>

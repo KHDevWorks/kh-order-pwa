@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 const withPWA = require('next-pwa')({
   dest: 'public',
   // 開発環境 (development) の時は PWA を無効にする
@@ -6,4 +7,14 @@ const withPWA = require('next-pwa')({
 
 module.exports = withPWA({
   // その他の設定
+=======
+const withPWA = require('next-pwa')({
+  dest: 'public',
+  // 開発環境 (development) の時は PWA を無効にする
+  disable: process.env.NODE_ENV === 'development',
+});
+
+module.exports = withPWA({
+  // その他の設定
+>>>>>>> eaed134 (2026.4.13変更)
 });

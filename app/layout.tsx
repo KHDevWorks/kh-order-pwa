@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import type { Metadata, Viewport } from "next";
 import { Providers } from "./providers";
 import "./globals.css";
@@ -22,10 +23,26 @@ export const metadata: Metadata = {
     telephone: false,
   },
 };
+=======
+import type { Metadata } from 'next'
+import React from 'react'
+import './globals.css'
+
+export const metadata: Metadata = {
+  title: 'KH Studio - 受発注管理',
+  description: 'KH Studio 受発注管理 PWA',
+  manifest: "/manifest.json",
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/icons/apple-touch-icon.png",
+  },
+}
+>>>>>>> eaed134 (2026.4.13変更)
 
 export default function RootLayout({
   children,
 }: {
+<<<<<<< HEAD
   children: React.ReactNode;
 }) {
   return (
@@ -42,4 +59,13 @@ export default function RootLayout({
       </body>
     </html>
   );
+=======
+  children: React.ReactNode
+}) {
+  return (
+    <html lang="ja">
+      <body>{children}</body>
+    </html>
+  )
+>>>>>>> eaed134 (2026.4.13変更)
 }

@@ -6,6 +6,7 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue?style=flat-square&logo=typescript)
 ![PWA](https://img.shields.io/badge/PWA-Ready-green?style=flat-square)
 
+<<<<<<< HEAD
 KH Studioの受発注管理システムをProgressive Web App (PWA)として実装したモダンなウェブアプリケーションです。サイバーパンク調のデザインとスムーズなアニメーションが特徴です。
 
 ## **概要**
@@ -49,6 +50,9 @@ KH Studioの受発注管理システムをProgressive Web App (PWA)として実�
 - **ディレクトリ構成の整理**
     → Next.js + TypeScript のベストプラクティスを採用
     → コンポーネント分離・責務の明確化
+=======
+KH Studioの受発注管理システムをProgressive Web App (PWA)として実装したモダンなウェブアプリケーションです。サイバーパンク調のデザインとスムーズなアニメーションを特徴としています。
+>>>>>>> eaed134 (2026.4.13変更)
 
 ## ✨ 主な機能
 
@@ -81,6 +85,7 @@ KH Studioの受発注管理システムをProgressive Web App (PWA)として実�
 - 高速起動
 - ネイティブアプリのような操作性
 
+<<<<<<< HEAD
 ## 🏗️ アーキテクチャ
 
 ### 📐 レイヤー図
@@ -207,6 +212,8 @@ PWA Features
 └──────────────────────────────────────────────────┘
 ```
 
+=======
+>>>>>>> eaed134 (2026.4.13変更)
 ## 🛠️ 技術スタック
 
 ### フロントエンド
@@ -273,6 +280,7 @@ PWA Features
 2. Safariの場合: 共有ボタン → "ホーム画面に追加"
 3. Firefoxの場合: インストール可能なサイトとして表示
 
+<<<<<<< HEAD
 ### スマートフォンでの使用方法
 
 1. アプリをインストール
@@ -308,6 +316,8 @@ PWA Features
 
 • ChromeやEdgeでインストールアイコンをクリック。デスクトップにアプリとして追加されます。
 
+=======
+>>>>>>> eaed134 (2026.4.13変更)
 ## 🧪 テスト方法
 
 ### 自動テスト実行
@@ -429,4 +439,9 @@ npm run export
 
 ---
 
+<<<<<<< HEAD
 **KH Studio** - AI & App Engineering 🚀
+=======
+**KH Studio** - AI & App Engineering 🚀</content>
+<parameter name="filePath">d:\Documents\github-my-date\kh-order-pwa\README.md
+>>>>>>> eaed134 (2026.4.13変更)
