@@ -72,9 +72,20 @@ jobs:
 
   security-scan:
     runs-on: ubuntu-latest
-    needs: build
+    permissions:
+      contents: read
+      security-events: write # スキャン結果の登録に必要
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript-typescript # python を削除
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
 
       # CodeQL
       - uses: github/codeql-action/init@v3
