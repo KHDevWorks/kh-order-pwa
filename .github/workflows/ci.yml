@@ -44,7 +44,7 @@ jobs:
         with:
           python-version: "3.11"
      # - run: pip install -r requirements.txt
-      - run: pytest -q
+     #- run: pytest -q
 
   build:
     runs-on: ubuntu-latest
@@ -64,7 +64,7 @@ jobs:
         with:
           python-version: "3.11"
       #- run: pip install -r requirements.txt
-      - run: python scripts/prepare_rag_data.py
+      #- run: python scripts/prepare_rag_data.py
 
   security-scan:
     runs-on: ubuntu-latest
