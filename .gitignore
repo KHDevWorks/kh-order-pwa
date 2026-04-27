@@ -1,0 +1,32 @@
+# --- Node / Next.js ---
+node_modules/
+.next/
+out/
+dist/
+build/
+
+# --- Logs ---
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+
+# --- Environment variables ---
+.env
+.env.local
+.env.development.local
+.env.production.local
+.env.test.local
+
+# --- OS files ---
+.DS_Store
+Thumbs.db
+
+# --- VSCode ---
+.vscode/
+*.code-workspace
+
+# --- Build artifacts ---
+*.pack.gz
+trace
