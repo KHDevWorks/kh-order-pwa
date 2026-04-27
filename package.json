@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-     "test": "echo \"No tests yet\""
+    "test": "echo \"No tests yet\""
   },
   "dependencies": {
     "framer-motion": "^10.16.4",
