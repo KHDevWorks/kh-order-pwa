@@ -376,12 +376,40 @@ npm run start
 npm run lint
 ```
 
+### Docker開発
+```bash
+# Dockerイメージをビルド
+docker build -t kh-order-pwa .
+
+# コンテナを実行
+docker run -p 3000:3000 kh-order-pwa
+
+# Docker Composeで実行（推奨）
+docker-compose up --build
+```
+
 ### カスタマイズ
 - **デザイン変更**: `app/globals.css` と Tailwind設定
 - **機能追加**: `app/page.tsx` のコンポーネント編集
 - **PWA設定**: `next.config.js` と `public/manifest.json`
 
 ## 🚀 デプロイ方法
+
+### Docker（推奨）
+1. **イメージをビルド**
+   ```bash
+   docker build -t kh-order-pwa .
+   ```
+
+2. **コンテナを実行**
+   ```bash
+   docker run -p 3000:3000 kh-order-pwa
+   ```
+
+3. **ブラウザでアクセス**
+   ```
+   http://localhost:3000
+   ```
 
 ### Vercel（推奨）
 1. **Vercelアカウント作成**

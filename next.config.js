@@ -16,5 +16,9 @@ const withPWA = require('next-pwa')({
 
 module.exports = withPWA({
   // その他の設定
+<<<<<<< HEAD
 >>>>>>> eaed134 (2026.4.13変更)
+=======
+  output: 'standalone',
+>>>>>>> f3979d6 (docker環境)
 });
