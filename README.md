@@ -6,7 +6,7 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue?style=flat-square&logo=typescript)
 ![PWA](https://img.shields.io/badge/PWA-Ready-green?style=flat-square)
 
-KH Studioの受発注管理システムをProgressive Web App (PWA)として実装したモダンなウェブアプリケーションです。サイバーパンク調のデザインとスムーズなアニメーションを特徴としています。
+KH Studioの受発注管理システムをProgressive Web App (PWA)として実装したモダンなウェブアプリケーションです。サイバーパンク調のデザインとスムーズなアニメーションが特徴です。
 
 ## ✨ 主な機能
 
@@ -38,6 +38,132 @@ KH Studioの受発注管理システムをProgressive Web App (PWA)として実�
 - インストール可能
 - 高速起動
 - ネイティブアプリのような操作性
+
+## 🏗️ アーキテクチャ
+
+### 📐 レイヤー図
+
+```
+┌─────────────────────────────────────────────────┐
+│          Presentation Layer (UI)                 │
+│  ┌──────────────────────────────────────────┐  │
+│  │  Dashboard  │ Auth  │ Splash  │ Layout  │  │
+│  └──────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────┘
+                      ↕
+┌─────────────────────────────────────────────────┐
+│        Business Logic Layer                      │
+│  ┌──────────────────────────────────────────┐  │
+│  │  State Management  │  Validation Logic   │  │
+│  │  Form Handling     │  Authentication     │  │
+│  └──────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────┘
+                      ↕
+┌─────────────────────────────────────────────────┐
+│     Technology Layer                            │
+│  ┌──────────────────────────────────────────┐  │
+│  │  Next.js  │  React  │  TypeScript        │  │
+│  │  Tailwind │ Framer Motion                │  │
+│  └──────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────┘
+                      ↕
+┌─────────────────────────────────────────────────┐
+│    Infrastructure Layer                         │
+│  ┌──────────────────────────────────────────┐  │
+│  │  PWA Manifest  │  Service Worker         │  │
+│  │  Static Assets │  Cache Storage          │  │
+│  └──────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────┘
+```
+
+### 🔄 データフロー図
+
+```
+User Input
+    │
+    ↓
+┌─────────────────────┐
+│   React Component   │ (page.tsx)
+│   (State: Auth,     │
+│    Dashboard)       │
+└─────────────────────┘
+    │
+    ├─→ Authentication Flow
+    │   ├─→ Validate Input
+    │   ├─→ Update State
+    │   └─→ Navigate to Dashboard
+    │
+    └─→ Dashboard Flow
+        ├─→ Render Statistics Cards
+        │   (Pending Orders, Inventory, Active Clients)
+        │
+        ├─→ Display Order Management Console
+        │   └─→ Order List
+        │
+        └─→ Show Live System Logs
+            └─→ Real-time Log Updates
+                (Simulated in-memory)
+
+    ↓
+Browser Rendering
+    │
+    ├─→ Tailwind CSS Styling
+    ├─→ Framer Motion Animation
+    └─→ Responsive Layout
+
+    ↓
+PWA Features
+    ├─→ Service Worker (Offline)
+    ├─→ Cache Storage
+    └─→ Installation Capability
+```
+
+### 📱 PWA アーキテクチャ図
+
+```
+┌──────────────────────────────────────────────────┐
+│         PWA (Progressive Web App)                │
+├──────────────────────────────────────────────────┤
+│                                                  │
+│  ┌─────────────────────────────────────────┐   │
+│  │  Next.js 14 Application                 │   │
+│  │  ┌───────────────────────────────────┐ │   │
+│  │  │  Pages & Components (React 18)    │ │   │
+│  │  │  ├─ Splash                        │ │   │
+│  │  │  ├─ Auth (Login/Register)         │ │   │
+│  │  │  └─ Dashboard                     │ │   │
+│  │  └───────────────────────────────────┘ │   │
+│  └─────────────────────────────────────────┘   │
+│                    ↕                            │
+│  ┌─────────────────────────────────────────┐   │
+│  │  Next PWA Configuration                 │   │
+│  │  ├─ manifest.json (App Metadata)        │   │
+│  │  ├─ Service Worker (Offline Support)    │   │
+│  │  └─ Icons (Multiple Sizes)              │   │
+│  └─────────────────────────────────────────┘   │
+│                    ↕                            │
+│  ┌─────────────────────────────────────────┐   │
+│  │  Browser APIs                           │   │
+│  │  ├─ Service Worker API                  │   │
+│  │  ├─ Cache API                           │   │
+│  │  ├─ IndexedDB                           │   │
+│  │  └─ App Shell Model                     │   │
+│  └─────────────────────────────────────────┘   │
+│                                                  │
+├──────────────────────────────────────────────────┤
+│  Installation Methods:                          │
+│  • Chrome: Install Button (URL bar)             │
+│  • Safari: Share → Add to Home Screen           │
+│  • Firefox: Install Option                      │
+│  • Android: Native Install Prompt               │
+├──────────────────────────────────────────────────┤
+│  Capabilities:                                  │
+│  ✓ Offline Support      ✓ App-like Experience  │
+│  ✓ Installable          ✓ Push Notifications   │
+│  ✓ Fast Loading         ✓ HTTPS Secure         │
+│  ✓ Responsive Design    ✓ Cross Platform       │
+└──────────────────────────────────────────────────┘
+```
 
 ## 🛠️ 技術スタック
 
@@ -105,7 +231,7 @@ KH Studioの受発注管理システムをProgressive Web App (PWA)として実�
 2. Safariの場合: 共有ボタン → "ホーム画面に追加"
 3. Firefoxの場合: インストール可能なサイトとして表示
 
-###スマートフォンでの使用方法
+### スマートフォンでの使用方法
 
 1. アプリをインストール
 
@@ -124,7 +250,7 @@ KH Studioの受発注管理システムをProgressive Web App (PWA)として実�
 • メニューからアカウント設定やログアウトが行えます。
 
 
-###PCでの使用方法
+### PCでの使用方法
 
 1. ブラウザでの利用
 
@@ -261,5 +387,4 @@ npm run export
 
 ---
 
-**KH Studio** - AI & App Engineering 🚀</content>
-<parameter name="filePath">d:\Documents\github-my-date\kh-order-pwa\README.md
+**KH Studio** - AI & App Engineering 🚀
