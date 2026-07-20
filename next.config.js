@@ -26,7 +26,13 @@ module.exports = withPWA({
 =======
 });
 
-module.exports = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   output: 'export',
 };
+<<<<<<< HEAD
 >>>>>>> 4284093 (修正)
+=======
+
+module.exports = nextConfig;
+>>>>>>> 47e70da (修正)
