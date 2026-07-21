@@ -53,7 +53,7 @@ test.describe('フォームバリデーション', () => {
     await expect(dashboard).not.toBeVisible();
   });
 
-  test('4. 2���字のname + 8文字のpasswordで、ダッシュボードに遷移する (成功)', async ({ page }) => {
+  test('4. 2文字のname + 8文字のpasswordで、ダッシュボードに遷移する (成功)', async ({ page }) => {
     const nameInput = page.locator('input[placeholder="Username"]');
     const passwordInput = page.locator('input[placeholder="••••••••"]');
 
@@ -104,7 +104,7 @@ test.describe('フォームバリデーション', () => {
 
     await page.click('button[type="submit"]');
 
-    // ダッシュボードに遷移
+    // ダ���シュボードに遷移
     const dashboard = page.locator('text=OPERATIONS CONTROL');
     await expect(dashboard).toBeVisible();
   });
