@@ -1,7 +1,6 @@
-<<<<<<< HEAD
 import type { Metadata, Viewport } from "next";
+import React from 'react';
 import { Providers } from "./providers";
-import "./globals.css";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -11,9 +10,13 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "KH Order PWA",
-  description: "KH Studio Order Management PWA",
+  title: "KH Studio - 受発注管理",
+  description: "KH Studio 受発注管理 PWA",
   manifest: "/manifest.json",
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/icons/apple-touch-icon.png",
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
@@ -23,49 +26,19 @@ export const metadata: Metadata = {
     telephone: false,
   },
 };
-=======
-import type { Metadata } from 'next'
-import React from 'react'
-import './globals.css'
 
-export const metadata: Metadata = {
-  title: 'KH Studio - 受発注管理',
-  description: 'KH Studio 受発注管理 PWA',
-  manifest: "/manifest.json",
-  icons: {
-    icon: "/favicon.ico",
-    apple: "/icons/apple-touch-icon.png",
-  },
-}
->>>>>>> eaed134 (2026.4.13変更)
-
-export default function RootLayout({
-  children,
-}: {
-<<<<<<< HEAD
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ja">
       <head>
         <link rel="manifest" href="/manifest.json" />
-        <link rel="apple-touch-icon" href="/icon-192x192.png" />
+        <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
         <meta name="theme-color" content="#000000" />
+        <style>{`html,body{margin:0;padding:0;width:100%;height:100%;background:#1e1e1e;color:#fff}`}</style>
       </head>
-      <body className="bg-black text-white">
-        <Providers>
-          {children}
-        </Providers>
+      <body>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
-=======
-  children: React.ReactNode
-}) {
-  return (
-    <html lang="ja">
-      <body>{children}</body>
-    </html>
-  )
->>>>>>> eaed134 (2026.4.13変更)
 }
