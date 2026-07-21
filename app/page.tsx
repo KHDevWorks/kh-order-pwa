@@ -8,11 +8,31 @@ import { Lock, User, LayoutDashboard, ShoppingCart, Package, Users, Settings, Lo
 type Screen = 'splash' | 'auth' | 'dashboard';
 type AuthMode = 'login' | 'register';
 
+interface Star {
+  x: number;
+  y: number;
+  r: number;
+  o: number;
+  speed: number;
+  phase: number;
+}
+
+interface FormData {
+  name: string;
+  password: string;
+}
+
+interface FormErrors {
+  name: string;
+  password: string;
+}
+
 export default function KHStudioApp() {
   const [screen, setScreen] = useState<Screen>('splash');
   const [authMode, setAuthMode] = useState<AuthMode>('login');
-  const [formData, setFormData] = useState({ name: '', password: '' });
-  const [errors, setErrors] = useState({ name: '', password: '' });
+  const [formData, setFormData] = useState<FormData>({ name: '', password: '' });
+  const [errors, setErrors] = useState<FormErrors>({ name: '', password: '' });
+  const [isLoading, setIsLoading] = useState(false);
 
   // 1. スプラッシュ画面の5秒タイマー
   useEffect(() => {
@@ -22,19 +42,19 @@ export default function KHStudioApp() {
 
   // 2. 背景の星空描画 (useEffect)
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const starsRef = useRef<Star[]>([]);
+  const tRef = useRef(0);
+  const animationFrameIdRef = useRef<number>();
+
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    let animationFrameId: number;
-    let stars: any[] = [];
-
-    const resize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      stars = Array.from({ length: 160 }, () => ({
+    // 星の初期化
+    const initializeStars = () => {
+      starsRef.current = Array.from({ length: 160 }, () => ({
         x: Math.random(),
         y: Math.random(),
         r: Math.random() * 1.2 + 0.2,
@@ -44,41 +64,102 @@ export default function KHStudioApp() {
       }));
     };
 
-    let t = 0;
+    const resize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      // リサイズ時に星を再生成しない（改善）
+      if (starsRef.current.length === 0) {
+        initializeStars();
+      }
+    };
+
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      t += 0.016;
-      stars.forEach(s => {
-        const opacity = s.o * (0.6 + 0.4 * Math.sin(t * s.speed * 100 + s.phase));
+      tRef.current += 0.016;
+      
+      starsRef.current.forEach((s) => {
+        const opacity = s.o * (0.6 + 0.4 * Math.sin(tRef.current * s.speed * 100 + s.phase));
         ctx.beginPath();
         ctx.arc(s.x * canvas.width, s.y * canvas.height, s.r, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
         ctx.fill();
       });
-      animationFrameId = requestAnimationFrame(draw);
+      animationFrameIdRef.current = requestAnimationFrame(draw);
     };
 
     window.addEventListener('resize', resize);
+    initializeStars();
     resize();
     draw();
+
     return () => {
       window.removeEventListener('resize', resize);
-      cancelAnimationFrame(animationFrameId);
+      if (animationFrameIdRef.current) {
+        cancelAnimationFrame(animationFrameIdRef.current);
+      }
     };
   }, []);
 
-  // 3. バリデーション & 送信
-  const handleAuth = (e: React.FormEvent) => {
-    e.preventDefault();
-    const newErrors = {
+  // 3. バリデーション ロジック（authModeに応じた異なるルール）
+  const validateForm = (): boolean => {
+    const newErrors: FormErrors = {
       name: formData.name.length < 2 ? '2文字以上で入力してください' : '',
       password: formData.password.length < 8 ? '8文字以上で入力してください' : '',
     };
-    setErrors(newErrors);
 
-    if (!newErrors.name && !newErrors.password) {
-      setScreen('dashboard');
+    // Register モードの場合、パスワード強度チェックを追加
+    if (authMode === 'register' && formData.password) {
+      const hasUpperCase = /[A-Z]/.test(formData.password);
+      const hasNumber = /[0-9]/.test(formData.password);
+      if (!hasUpperCase || !hasNumber) {
+        newErrors.password = 'パスワードは大文字と数字を含む必要があります';
+      }
     }
+
+    setErrors(newErrors);
+    return !newErrors.name && !newErrors.password;
+  };
+
+  // 4. フォーム送信（ローディング状態を追加）
+  const handleAuth = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!validateForm()) {
+      return;
+    }
+
+    // ローディング状態を開始
+    setIsLoading(true);
+
+    // 送信処理をシミュレート（実際のAPIコールに置き換え可能）
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 800));
+      
+      // 成功時
+      console.log(`✅ ${authMode === 'login' ? 'ログイン' : '登録'} 成功:`, formData);
+      setScreen('dashboard');
+    } catch (error) {
+      console.error('❌ エラー:', error);
+      setErrors({
+        name: '',
+        password: 'エラーが発生しました。もう一度お試しください。',
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // 5. ログアウト（フォーム入力をクリア）
+  const handleLogout = () => {
+    setFormData({ name: '', password: '' });
+    setErrors({ name: '', password: '' });
+    setScreen('auth');
+  };
+
+  // 6. Auth モード切り替え（エラーもクリア）
+  const handleAuthModeToggle = () => {
+    setAuthMode(authMode === 'login' ? 'register' : 'login');
+    setErrors({ name: '', password: '' });
   };
 
   return (
@@ -149,10 +230,11 @@ export default function KHStudioApp() {
                     <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#00e5ff]" />
                     <input 
                       type="text"
-                      className="w-full bg-black/40 border border-white/10 rounded-lg py-3 pl-10 pr-4 focus:border-[#00e5ff]/50 outline-none transition-all"
+                      className="w-full bg-black/40 border border-white/10 rounded-lg py-3 pl-10 pr-4 focus:border-[#00e5ff]/50 outline-none transition-all disabled:opacity-50"
                       placeholder="Username"
                       value={formData.name}
                       onChange={(e) => setFormData({...formData, name: e.target.value})}
+                      disabled={isLoading}
                     />
                   </div>
                   {errors.name && <p className="text-red-400 text-[10px] mt-1">{errors.name}</p>}
@@ -164,27 +246,44 @@ export default function KHStudioApp() {
                     <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#00e5ff]" />
                     <input 
                       type="password"
-                      className="w-full bg-black/40 border border-white/10 rounded-lg py-3 pl-10 pr-4 focus:border-[#00e5ff]/50 outline-none transition-all"
+                      className="w-full bg-black/40 border border-white/10 rounded-lg py-3 pl-10 pr-4 focus:border-[#00e5ff]/50 outline-none transition-all disabled:opacity-50"
                       placeholder="••••••••"
                       value={formData.password}
                       onChange={(e) => setFormData({...formData, password: e.target.value})}
+                      disabled={isLoading}
                     />
                   </div>
                   {errors.password && <p className="text-red-400 text-[10px] mt-1">{errors.password}</p>}
+                  
+                  {/* Register モードのパスワード要件 */}
+                  {authMode === 'register' && (
+                    <div className="mt-2 text-[9px] text-gray-500">
+                      <p>要件: 8文字以上、大文字と数字を含む</p>
+                    </div>
+                  )}
                 </div>
 
                 <button 
                   type="submit"
-                  className="w-full bg-gradient-to-r from-[#00e5ff] to-[#009bb0] text-black font-bold py-3 rounded-lg hover:opacity-90 transition-opacity shadow-[0_0_15px_rgba(0,229,255,0.3)]"
+                  disabled={isLoading}
+                  className="w-full bg-gradient-to-r from-[#00e5ff] to-[#009bb0] text-black font-bold py-3 rounded-lg hover:opacity-90 transition-opacity shadow-[0_0_15px_rgba(0,229,255,0.3)] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
-                  {authMode === 'login' ? 'INITIALIZE SESSION' : 'REGISTER AGENT'}
+                  {isLoading ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-transparent border-t-black rounded-full animate-spin" />
+                      <span>処理中...</span>
+                    </>
+                  ) : (
+                    authMode === 'login' ? 'INITIALIZE SESSION' : 'REGISTER AGENT'
+                  )}
                 </button>
               </form>
 
               <div className="mt-6 text-center">
                 <button 
-                  onClick={() => setAuthMode(authMode === 'login' ? 'register' : 'login')}
-                  className="text-[10px] text-gray-400 hover:text-[#00e5ff] tracking-widest uppercase transition-colors"
+                  onClick={handleAuthModeToggle}
+                  disabled={isLoading}
+                  className="text-[10px] text-gray-400 hover:text-[#00e5ff] tracking-widest uppercase transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {authMode === 'login' ? "Don't have an account? Sign Up" : "Already registered? Login"}
                 </button>
@@ -204,8 +303,8 @@ export default function KHStudioApp() {
             <nav className="fixed top-0 left-0 right-0 h-16 border-b border-white/5 backdrop-blur-md z-50 px-8 flex items-center justify-between">
               <div className="font-orbitron font-bold text-sm tracking-tighter">KH <span className="text-[#00e5ff]">CORE</span></div>
               <div className="flex gap-6">
-                <Settings className="w-4 h-4 text-gray-400 hover:text-white cursor-pointer" />
-                <LogOut className="w-4 h-4 text-gray-400 hover:text-white cursor-pointer" onClick={() => setScreen('auth')} />
+                <Settings className="w-4 h-4 text-gray-400 hover:text-white cursor-pointer transition-colors" />
+                <LogOut className="w-4 h-4 text-gray-400 hover:text-white cursor-pointer transition-colors" onClick={handleLogout} />
               </div>
             </nav>
 
